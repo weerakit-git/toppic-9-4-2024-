@@ -7,13 +7,11 @@
 <?php $attributes = $attributes->except(collect($constructor->getParameters())->map->getName()->all()); ?>
 <?php endif; ?>
 <?php $component->withAttributes([]); ?>
-     <?php $__env->slot('header', null, []); ?> 
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-          
-        </h2>
-     <?php $__env->endSlot(); ?>
+    
+<div class="container" style="padding-left:10rem">
 
-    <div class="py-12">
+
+    <div class="py-12 " style="width: 850px ;height: 650px ;padding-left:10rem">
         <div class="container">
             <div class="row">
                  <div class="card">
@@ -54,6 +52,7 @@ unset($__errorArgs, $__bag); ?>
                    </div>
            </div>
         </div>
+    </div>
     </div>
  <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>

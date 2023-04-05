@@ -7,14 +7,11 @@
 <?php $attributes = $attributes->except(collect($constructor->getParameters())->map->getName()->all()); ?>
 <?php endif; ?>
 <?php $component->withAttributes([]); ?>
-     <?php $__env->slot('header', null, []); ?> 
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-          
-        </h2>
-     <?php $__env->endSlot(); ?>
     
+    <?php if($title == null): ?>
+       <h1>no post</h1> 
+    <?php endif; ?>
 
-     
     <?php if(session("success")): ?>
     <div class="alert alert-success"><?php echo e(session('success')); ?></div>
     <?php endif; ?>
@@ -39,30 +36,44 @@
 
                       </tr>
                     </thead>
-                            <tbody>
-                                <?php ($i=1); ?>
-                                <?php $__currentLoopData = $title; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?> 
-                                   <?php $__currentLoopData = $users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $col): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?> 
-                            <tr>
-                                <th scope="row"><?php echo e($i++); ?></th>
-                                <td><?php echo e($row->titel); ?></td>
-                                <td ><?php echo e($row->body); ?></td>
-                                <td>
-                                    <img src="<?php echo e(asset($row->service_image)); ?>" alt="">
-                                </td>
-                                <td><?php echo e($row->created_at->diffForHumans()); ?></td>
-                                <td><?php echo e($col->name); ?></td>
-                                <td>
-                                    <a href="<?php echo e(url('/page/edit/'.$row->id)); ?>" class="btn btn-primary">Edit</a>
-                                </td>
-                                <td>
-                                    <a href="<?php echo e(url('/page/delete/'.$row->id)); ?>" class="btn btn-danger">Delete</a>
-                                </td>
-                            </tr>
-                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                            </tbody>
+                    <?php if(isset($title)): ?>
+                    <tbody>
+                        <?php ($i=1); ?>
+                        <?php $__currentLoopData = $title; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?> 
+                        <tr>
+                            
+                            <th><?php echo e($i++); ?></th>
+                            <td><?php echo e($row->titel); ?></td>
+                            <td ><?php echo e($row->body); ?></td>
+                            <td>
+                             <?php if(isset($row->service_image)): ?>  
+                                 <img src="<?php echo e(asset('img/'.$row->service_image)); ?>" class="card-img-top" style="width: 150px" alt="...">      
+                            <?php endif; ?> 
+                            </td>
+                            <td><?php echo e($row->created_at->diffForHumans()); ?></td>
+                            <td><?php echo e($row->user->name); ?></td>
+                            <td>
+                                <a href="<?php echo e(url('/page/edit/'.$row->id)); ?>" class="btn btn-primary">Edit</a>
+                            </td>
+                            <td>
+                                <a href="<?php echo e(url('/page/delete/'.$row->id)); ?>" class="btn btn-danger">Delete</a>
+                            </td>
+                        </tr>
+                     
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                       
+
+                       
+                     </tbody>
+                  
+                    <?php endif; ?>
+
+                   
+                            
                   </table>
+
+
+               
         
                  
             </div>

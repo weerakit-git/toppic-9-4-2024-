@@ -1,11 +1,13 @@
 <x-app-layout>
-    <x-slot name="header">
+    {{-- <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
           
         </h2>
-    </x-slot>
+    </x-slot> --}}
+<div class="container" style="padding-left:10rem">
 
-    <div class="py-12">
+
+    <div class="py-12 " style="width: 850px ;height: 650px ;padding-left:10rem">
         <div class="container">
             <div class="row">
                  <div class="card">
@@ -39,5 +41,6 @@
                    </div>
            </div>
         </div>
+    </div>
     </div>
 </x-app-layout>

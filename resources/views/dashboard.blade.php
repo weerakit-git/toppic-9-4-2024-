@@ -1,12 +1,13 @@
 <x-app-layout>
-    <x-slot name="header">
+    {{-- <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
           
         </h2>
-    </x-slot>
-    
+    </x-slot> --}}
+    @if($title == null)
+       <h1>no post</h1> 
+    @endif
 
-     
     @if(session("success"))
     <div class="alert alert-success">{{session('success')}}</div>
     @endif
@@ -31,30 +32,44 @@
 
                       </tr>
                     </thead>
-                            <tbody>
-                                @php($i=1)
-                                @foreach ($title as $row) 
-                                   @foreach ($users as $col) 
-                            <tr>
-                                <th scope="row">{{$i++}}</th>
-                                <td>{{$row->titel}}</td>
-                                <td >{{$row->body}}</td>
-                                <td>
-                                    <img src="{{asset($row->service_image)}}" alt="">
-                                </td>
-                                <td>{{$row->created_at->diffForHumans()}}</td>
-                                <td>{{$col->name}}</td>
-                                <td>
-                                    <a href="{{url('/page/edit/'.$row->id)}}" class="btn btn-primary">Edit</a>
-                                </td>
-                                <td>
-                                    <a href="{{url('/page/delete/'.$row->id)}}" class="btn btn-danger">Delete</a>
-                                </td>
-                            </tr>
-                                @endforeach
-                            @endforeach
-                            </tbody>
+                    @isset($title)
+                    <tbody>
+                        @php($i=1)
+                        @foreach ($title as $row) 
+                        <tr>
+                            {{-- <th>{{$title->firstItem()+$loop->index}}</th> --}}
+                            <th>{{$i++}}</th>
+                            <td>{{$row->titel}}</td>
+                            <td >{{$row->body}}</td>
+                            <td>
+                             @isset($row->service_image)  
+                                 <img src="{{ asset('img/'.$row->service_image) }}" class="card-img-top" style="width: 150px" alt="...">      
+                            @endisset 
+                            </td>
+                            <td>{{$row->created_at->diffForHumans()}}</td>
+                            <td>{{$row->user->name}}</td>
+                            <td>
+                                <a href="{{url('/page/edit/'.$row->id)}}" class="btn btn-primary">Edit</a>
+                            </td>
+                            <td>
+                                <a href="{{url('/page/delete/'.$row->id)}}" class="btn btn-danger">Delete</a>
+                            </td>
+                        </tr>
+                     
+                        @endforeach
+                       
+
+                       
+                     </tbody>
+                  
+                    @endisset
+
+                   
+                            
                   </table>
+
+
+               
         
                  
             </div>

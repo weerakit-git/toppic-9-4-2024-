@@ -13,13 +13,13 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link href="{{ route('home') }}" :active="request()->routeIs('home')">
-                        Home
+                        หน้าแรก
                        </x-nav-link>
-                    <x-nav-link href="{{ route('homepost') }}" :active="request()->routeIs('homepost')">
-                      Admin
+                    <x-nav-link href="{{ route('homepost') }}" :active="request()->routeIs('dashboard')">
+                      แก้ไขโพสต์
                     </x-nav-link>
                     <x-nav-link href="{{ route('post') }}" :active="request()->routeIs('post')">
-                    Post
+                    โพสต์ใหม่
                     </x-nav-link>
                 </div>
             </div>

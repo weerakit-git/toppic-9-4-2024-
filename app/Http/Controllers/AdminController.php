@@ -37,83 +37,46 @@ class AdminController extends Controller
             ]
     );  
 
-    //   //การเข้ารหัสภาพ
-    //   $service_image = $request->file('service_image');
-
-    //   //generate name image
-    //   $name_gen =hexdec(uniqid()); 
-
-    //   //ดึงนามสกุลไฟล์
-    //   $img_ext = strtolower($service_image->getClientOriginalExtension());
-    //   $img_name = $name_gen.'.'.$img_ext;
-
-    //   //อัพโหลดภาพ
-    //   $upload_location = 'image/service';
-    //   $full_path = $upload_location.$img_name;
-    //   Admincontrol::insert([
-    //     'service_image'=>$full_path,
-    //   ]);
-    //   $service_image -> move($upload_location,$img_name); 
-
-    // $pagination = Admincontrol::pagination(5);
-
-
-
-    $service_image = $request->file('service_image');
-
-    //           //generate name image
-    //   $name_gen =hexdec(uniqid()); 
-
-    //   //ดึงนามสกุลไฟล์
-    //   $img_ext = strtolower($service_image->getClientOriginalExtension());
-    //   $img_name = $name_gen.'.'.$img_ext;
-
-    //   //อัพโหลดภาพ
-    //   $upload_location = 'image/service';
-    //   $full_path = $upload_location.$img_name;
-    //   Admincontrol::insert([
-    //     'service_image'=>$full_path,
-    //   ]);
-    //   $service_image -> move($upload_location,$img_name); 
-
-
-
-        
-    if($service_image){
-        $image_name = time().'_'.$service_image->getClientOriginalName();
-        $image_path = $service_image->storeAs('public/img', $image_name);
-        $image_name_to_save_in_db = basename($image_path);
-
-    } else {
-        $image_path = null;
-        $image_name_to_save_in_db = null;
-    }
-
-
-
     
-    // $isInsertSuccess = Post_table::insert([
-    //     'topic_name' => $title,
-    //     'topic_info' => $content,
-    //     'user_id' => $user_id,
-    //     'topic_p' => $image_name_to_save_in_db,
-    // ]);
+    if($request->file('service_image')){
+        $service_image = $request->file('service_image');
+        $image_name = time().'_'.$service_image->getClientOriginalName();
+
+        if($service_image){
+            $image_path = $service_image->move('img/', $image_name);
+            $data = new Admincontrol;
+            $data->titel = $request->title_name;
+            $data->body = $request->body_name;
+            $data->service_image = $image_name;
+            $data->User_id = Auth::user()->id;
+            $data->save(); 
+        } 
+    }else {
+        $data = new Admincontrol;
+        $data->titel = $request->title_name;
+        $data->body = $request->body_name;
+        $data->service_image = null;
+        $data->User_id = Auth::user()->id;
+        $data->save();
+    }
+    // if($service_image){
+    //     $image_path = $service_image->move('img/', $image_name);
+    //     $image_name_to_save_in_db = basename($image_path);
+
+    // } else {
+    //     $image_path = null;
+    //     $image_name_to_save_in_db = null;
+    // }
     
     //บันทึกข้อมูล
-    $data = new Admincontrol;
-    $data->titel = $request->title_name;
-    $data->body = $request->body_name;
-    $data->service_image = $request->service_image;
-    $data->User_id = Auth::user()->id;
-    $data->save();
     
-    return redirect('/dashboard')->with('success',"บันทึกข้อมูลเรียบร้อย");;
+    
+    return redirect('page/home')->with('success',"โพสต์เรียบร้อย");;
     }
 
 //edit
     public function edit($id){
        $editpost = Admincontrol::find($id);
-    //    dd($editpost->body);
        return view('adminpage.edit', compact('editpost'));
     }
      
@@ -129,13 +92,26 @@ class AdminController extends Controller
                         'service_image.mimes'=>'กรุณาใส่นามสกุลไฟล์ให้ถูกต้อง'
                     ]
             );  
-            Admincontrol::find($id)->update([
-                'titel' => $request-> title_name,
-                'body' => $request->body_name,
-                'service_image' => $request->service_image
-            ]);
-            
-            return redirect('/dashboard')->with('success',"บันทึกข้อมูลเรียบร้อย"); 
+            if($request->file('service_image')){
+                $service_image = $request->file('service_image');
+                $image_name = time().'_'.$service_image->getClientOriginalName();
+    
+                if($service_image){
+                    $image_path = $service_image->move('img/', $image_name);
+                    Admincontrol::find($id)->update([
+                        'titel' => $request-> title_name,
+                        'body' => $request->body_name,
+                        'service_image' => $image_name
+                    ]);
+                } 
+            }else {
+                Admincontrol::find($id)->update([
+                    'titel' => $request-> title_name,
+                    'body' => $request->body_name,
+                    'service_image' => null
+                ]);
+            }
+            return redirect('/dashboard')->with('success',"โพสต์ข้อมูลเรียบร้อย"); 
         }
 
          //delete
@@ -147,8 +123,7 @@ class AdminController extends Controller
 
              public function show(){
                 $data = Admincontrol::all();
-                //  return view('adminpage.home', compact('data'));
-                 dd($data->id);
+                 return view('adminpage.home', compact('data'));
              }
 
 
